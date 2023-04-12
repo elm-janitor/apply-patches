@@ -17,7 +17,7 @@ It uses `$ELM_HOME` to find the directory, or defaults to `~/.elm`.\
 Note: I guess for Windows, another fallback is needed. I think the default
 location is `%appdata%/elm` (local/roaming), but have not tested it.
 
-## Usage
+## Development
 
 I configured `$ELM_HOME` to the local dir
 
@@ -40,9 +40,9 @@ elm make src/Main.elm
 cd ..
 ```
 
-This will fail, because it will only print a `TODO deadEndsToString` string.
+The test will fail, because it will only print a `TODO deadEndsToString` string.
 
-After that, apply the patches:
+After that, run the script to apply the patches like this:
 
 ```sh
 cd deno
