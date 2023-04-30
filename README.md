@@ -52,3 +52,47 @@ cd ..
 
 Then re-run the tests or compile the example file to see the output of the
 new `deadEndsToString`.
+
+## Usage
+
+### When deno is installed (3 options)
+
+**NOTE: These will only work once the repo is public.**
+
+1. Run the script
+
+```
+❯ deno run --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com  https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+```
+
+2. Install the script
+
+```
+❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+
+# And uninstall it again
+❯ deno uninstall elm-janitor-apply-patches
+```
+
+3. Compile a huge binary that contains the deno runtime
+
+```
+deno compile --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+```
+
+### When node is installed
+
+If there ever will be a stable version, use
+https://deno.land/manual@v1.32.4/advanced/publishing/dnt to generate a node
+module.
+
+### By downloading a binary
+
+If stable versions should ever be created,
+[deno compile](https://deno.land/manual@v1.32.4/tools/compiler) can be used on
+CI to create huge release binaries.
+
+## Notes
+
+To generate the docs.json file of an Elm package, run
+`elm make --docs docs.json`
