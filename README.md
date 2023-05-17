@@ -65,8 +65,6 @@ Then re-run the tests or compile the example file to see the output of the new
 
 ### When deno is installed (3 options)
 
-**NOTE: These will only work once the repo is public.**
-
 1. Run the script
 
 ```
