@@ -66,13 +66,13 @@ Then re-run the tests or compile the example file to see the output of the new
 1. Run the script
 
 ```
-❯ deno run --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com  https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+❯ deno run --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 ```
 
 2. Install the script
 
 ```
-❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 
 # And uninstall it again
 ❯ deno uninstall elm-janitor-apply-patches
@@ -81,7 +81,7 @@ Then re-run the tests or compile the example file to see the output of the new
 3. Compile a huge binary that contains the deno runtime
 
 ```
-deno compile --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/marc136/elm-janitor-apply-patches/main/deno/main.ts
+deno compile --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 ```
 
 ### When node is installed
