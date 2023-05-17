@@ -5,17 +5,21 @@ First draft at a script to apply the patches vetted by the
 
 ## Description
 
-The script replaces for every package the `src` dir and also deletes
-`artifacts.dat` if it exists. It does not unpack the `examples` dir or other
-files that exist in the git branch.
+The script can install patches from
+[elm-janitor](https://github.com/elm-janitor).
 
-It does not download (yet?) Elm packages that don't exist, because it would also
-need to download the `docs.json` file from package.elm-lang.org and also the
-License and README.md (I think).
+Like the Elm compiler, it uses the environment variable `$ELM_HOME` to find the
+cache directory, or defaults to `~/.elm`.
 
-It uses `$ELM_HOME` to find the directory, or defaults to `~/.elm`.\
 Note: I guess for Windows, another fallback is needed. I think the default
 location is `%appdata%/elm` (local/roaming), but have not tested it.
+
+It downloads the release, and unpacks `README.md`, `elm.json`, `LICENSE` and the
+contents of the `src/` directory.\
+If the package was already present in ELM_HOME, it is fully replaced.
+
+During the first compilation, the Elm compiler creates the `docs.json` and
+`artifacts.dat` files.
 
 ## Development
 
@@ -42,16 +46,16 @@ cd ..
 
 The test will fail, because it will only print a `TODO deadEndsToString` string.
 
-After that, run the script to apply the patches like this:
+After that, run the script to apply the patches for `elm/parser` like this:
 
 ```sh
 cd deno
-deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com main.ts
+deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com main.ts parser
 cd ..
 ```
 
-Then re-run the tests or compile the example file to see the output of the
-new `deadEndsToString`.
+Then re-run the tests or compile the example file to see the output of the new
+`deadEndsToString`.
 
 ## Usage
 

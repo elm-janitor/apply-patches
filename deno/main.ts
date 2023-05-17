@@ -197,9 +197,31 @@ function findElmHome(): string {
   return elmHome;
 }
 
+function printHelp() {
+  console.log("Usage help:");
+  console.log("TODO");
+}
+
 if (import.meta.main) {
   const elmHome = findElmHome();
   console.log(`Working with ELM_HOME '${elmHome}'.`);
-  // await patchCachedElmDependencies(elmHome);
-  await installPatch(elmHome, "parser");
+
+  const flags = parse(Deno.args, {
+    boolean: ["help"],
+  });
+
+  if (flags.help) {
+    printHelp();
+  } else if (Array.isArray(flags._) && flags._.length > 0) {
+    flags._.forEach((pkg: string | number) => {
+      if (typeof pkg !== "string" || !knownPatches[pkg]) {
+        console.error(`I don't know how to patch package 'elm/${pkg}'.`);
+        console.error("Will quit now.");
+        Deno.exit(1);
+      }
+    });
+    for (const pkg of flags._) {
+      await installPatch(elmHome, pkg as string);
+    }
+  }
 }
