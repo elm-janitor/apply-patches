@@ -110,9 +110,14 @@ export async function patchCachedElmDependencies(elmHomeDir: string) {
   );
 }
 
+interface InstallPatch {
+  elmHomeDir: string;
+  pkg: string;
+  verbose: boolean;
+}
+
 export async function installPatch(
-  elmHomeDir: string,
-  pkg: string,
+  { elmHomeDir, pkg, verbose }: InstallPatch,
 ): Promise<void> {
   const versions = knownPatches[pkg];
   if (!versions || versions.length === 0) {
@@ -121,13 +126,11 @@ export async function installPatch(
     throw new Error(err);
   }
   const version = versions[versions.length - 1];
-  console.log(
-    `Trying to install elm-janitor/${pkg} v${version} in '${elmHomeDir}'`,
-  );
+  console.log(`Trying to install elm-janitor/${pkg} v${version}`);
   const elmPkgDir = path.join(elmHomeDir, "0.19.1/packages/elm");
   const versionDir = path.join(elmPkgDir, pkg, version);
   await fs.emptyDir(versionDir);
-  console.log(`Created empty directory '${versionDir}'.`);
+  if (verbose) console.log(`Created empty directory '${versionDir}'.`);
 
   const branch = `stack-${version}`;
   const url = `https://github.com/elm-janitor/${pkg}/archive/${branch}.tar.gz`;
@@ -160,7 +163,7 @@ export async function installPatch(
       entry.fileName === `${drop}/README.md` ||
       entry.fileName.startsWith(`${drop}/src`)
     ) {
-      console.log(`  Unpacking: ${entry.fileName}`);
+      if (verbose) console.log(`  Unpacking: ${entry.fileName}`);
       switch (entry.type) {
         case "directory": {
           await fs.ensureDir(outputFileName(entry.fileName));
@@ -186,9 +189,10 @@ export async function installPatch(
         }
       }
     } else {
-      console.log(`  Ignoring: ${entry.fileName}`);
+      if (verbose) console.log(`  Ignoring: ${entry.fileName}`);
     }
   }
+  console.log("Done.");
 }
 
 function findElmHome(): string {
@@ -203,11 +207,11 @@ function printHelp() {
 }
 
 if (import.meta.main) {
-  const elmHome = findElmHome();
-  console.log(`Working with ELM_HOME '${elmHome}'.`);
+  const elmHomeDir = findElmHome();
+  console.log(`Working with ELM_HOME '${elmHomeDir}'.`);
 
   const flags = parse(Deno.args, {
-    boolean: ["help"],
+    boolean: ["help", "verbose"],
   });
 
   if (flags.help) {
@@ -220,8 +224,13 @@ if (import.meta.main) {
         Deno.exit(1);
       }
     });
+
     for (const pkg of flags._) {
-      await installPatch(elmHome, pkg as string);
+      await installPatch({
+        elmHomeDir,
+        pkg: pkg as string,
+        verbose: flags.verbose,
+      });
     }
   }
 }

@@ -50,7 +50,7 @@ After that, run the script to apply the patches for `elm/parser` like this:
 
 ```sh
 cd deno
-deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com main.ts parser
+deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com main.ts --verbose parser
 cd ..
 ```
 
