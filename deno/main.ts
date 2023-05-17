@@ -79,7 +79,7 @@ export async function patchCachedElmDependencies(elmHomeDir: string) {
                 const encoder = new TextEncoder();
                 const str =
                   `Using patched elm-janitor/${pkg.name} instead of elm/${pkg.name}@${version}`;
-                const data = encoder.encode(`console.warn('${str}');\n`);
+                const data = encoder.encode(`console.info('${str}');\n`);
                 writer.writeSync(data);
               }
               patched.push(out);
@@ -176,7 +176,7 @@ export async function installPatch(
             const encoder = new TextEncoder();
             const str =
               `Using patched elm-janitor/${pkg} instead of elm/${pkg}@${version}`;
-            const data = encoder.encode(`console.warn('${str}');\n`);
+            const data = encoder.encode(`console.info('${str}');\n`);
             writer.writeSync(data);
           }
           writer.close();
