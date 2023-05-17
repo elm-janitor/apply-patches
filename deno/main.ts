@@ -113,8 +113,12 @@ function findElmHome(): string {
 }
 
 function printHelp() {
-  console.log("Usage help:");
-  console.log("TODO");
+  console.log("To install one or more of the patched Elm packages from");
+  console.log("https://github.com/elm-janitor");
+  console.log("you need to pass its name.\n");
+  console.log("For example");
+  console.log("❯ elm-janitor-apply-patches parser");
+  console.log("");
 }
 
 if (import.meta.main) {
@@ -143,5 +147,7 @@ if (import.meta.main) {
         verbose: flags.verbose,
       });
     }
+  } else {
+    printHelp();
   }
 }
