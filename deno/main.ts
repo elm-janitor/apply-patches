@@ -190,9 +190,15 @@ export async function installPatch(
   }
 }
 
-if (import.meta.main) {
+function findElmHome(): string {
   // TODO find out if Windows uses `%appdata%/elm` or `%localappdata%/elm`
   const elmHome = Deno.env.get("ELM_HOME") || "~/.elm";
+  return elmHome;
+}
+
+if (import.meta.main) {
+  const elmHome = findElmHome();
+  console.log(`Working with ELM_HOME '${elmHome}'.`);
   // await patchCachedElmDependencies(elmHome);
   await installPatch(elmHome, "parser");
 }
