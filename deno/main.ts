@@ -59,6 +59,7 @@ interface DownloadPatch {
 async function downloadPatch(
   { pkg, branch, dir, verbose, version }: DownloadPatch,
 ) {
+  console.log("Downloading");
   const url = `https://github.com/elm-janitor/${pkg}/archive/${branch}.tar.gz`;
   const res = await fetch(url);
   if (res.status !== 200) {
@@ -174,6 +175,7 @@ if (import.meta.main) {
     });
 
     for (const pkg of flags._) {
+      console.log("");
       await installPatch({
         elmHomeDir,
         pkg: pkg as string,
