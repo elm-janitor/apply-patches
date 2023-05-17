@@ -21,7 +21,19 @@ If the package was already present in ELM_HOME, it is fully replaced.
 During the first compilation, the Elm compiler creates the `docs.json` and
 `artifacts.dat` files.
 
-Important: If you have an existing Elm project, it is best to remove the
+## Verifying the patch
+
+To verify that applying the patch was successful, you can open the file
+`elm-janitor-commit.json` inside the package directory (inside ELM_HOME).
+
+Also during runtime, every patch will print a message listing the commit id, for
+example:
+
+```
+console.info('Using elm-janitor/parser@a61f4ae instead of elm/parser@1.1.0');
+```
+
+**Important**: If you have an existing Elm project, it is best to remove the
 `elm-stuff` directory after applying the patches to ensure that the new sources
 are used and not old cached compiled files are used.
 
