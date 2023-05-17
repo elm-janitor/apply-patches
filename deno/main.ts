@@ -44,8 +44,30 @@ export async function installPatch(
   if (verbose) console.log(`Created empty directory '${dir}'.`);
 
   const branch = `stack-${version}`;
+  await saveCommitHash({ pkg, branch, dir });
   await downloadPatch({ pkg, branch, dir, verbose, version });
   console.log("Done.");
+}
+
+interface SaveCommitHash {
+  pkg: string;
+  branch: string;
+  dir: string;
+}
+
+async function saveCommitHash({ pkg, branch, dir }: SaveCommitHash) {
+  const url =
+    `https://api.github.com/repos/elm-janitor/${pkg}/commits/${branch}`;
+  const json = await (await fetch(url)).json();
+  const hash: string = json.sha;
+
+  if (hash) console.log(`Commit ${hash}`);
+
+  await Deno.writeTextFile(
+    path.join(dir, "elm-janitor-commit.json"),
+    JSON.stringify(json),
+  );
+  return hash;
 }
 
 interface DownloadPatch {
