@@ -85,14 +85,19 @@ There are three options when you have [deno](https://deno.land) installed.
 3. Compile a huge binary that contains the deno runtime
 
 ```
-deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/cli.ts
+❯ deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/cli.ts
 ```
 
 ### With node.js
 
-If there ever will be a stable version, use
-https://deno.land/manual@v1.32.4/advanced/publishing/dnt to generate a node
-module.
+The script is also published to
+[npm](https://www.npmjs.com/package/elm-janitor-apply-patches).
+
+You can run it in the node.js runtime for instance like this:
+
+```
+❯ npx elm-janitor-apply-patches
+```
 
 ### By downloading a binary
 
@@ -157,6 +162,11 @@ cd ..
 
 Then re-run the tests or compile the example `src/Main.elm` file to see the
 output of the new `deadEndsToString`.
+
+### Publishing to npm
+
+For information how to publish this deno code to npm as a node.js script, see
+[explanation](https://github.com/elm-janitor/apply-patches/blob/main/deno/README.md#publish-as-an-npm-package)
 
 ## Notes
 
