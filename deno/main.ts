@@ -44,8 +44,8 @@ export async function installPatch(
   if (verbose) console.log(`Created empty directory '${dir}'.`);
 
   const branch = `stack-${version}`;
-  await saveCommitHash({ pkg, branch, dir });
-  await downloadPatch({ pkg, branch, dir, verbose, version });
+  const hash = await saveCommitHash({ pkg, branch, dir });
+  await downloadPatch({ pkg, branch, dir, hash, verbose, version });
   console.log("Done.");
 }
 
@@ -67,19 +67,20 @@ async function saveCommitHash({ pkg, branch, dir }: SaveCommitHash) {
     path.join(dir, "elm-janitor-commit.json"),
     JSON.stringify(json),
   );
-  return hash;
+  return hash.substring(0, 7);
 }
 
 interface DownloadPatch {
   pkg: string;
   branch: string;
   dir: string;
+  hash: string;
   verbose: boolean;
   version: string;
 }
 
 async function downloadPatch(
-  { pkg, branch, dir, verbose, version }: DownloadPatch,
+  { pkg, branch, dir, hash, verbose, version }: DownloadPatch,
 ) {
   console.log("Downloading");
   const url = `https://github.com/elm-janitor/${pkg}/archive/${branch}.tar.gz`;
@@ -98,20 +99,21 @@ async function downloadPatch(
   const streamed = res.body.pipeThrough(new DecompressionStream("gzip"))
     .getReader();
   const reader = readerFromStreamReader(streamed);
-  await unpack({ pkg, branch, dir: dir, reader, verbose, version });
+  await unpack({ pkg, branch, dir, hash, reader, verbose, version });
 }
 
 interface Unpack {
   pkg: string;
   branch: string;
   dir: string;
+  hash: string;
   reader: Deno.Reader;
   verbose: boolean;
   version: string;
 }
 
 async function unpack(
-  { pkg, branch, dir, reader, verbose, version }: Unpack,
+  { pkg, branch, dir, hash, reader, verbose, version }: Unpack,
 ) {
   // github creates a dir like `parser-stack-1.1.0`
   const drop = `${pkg}-${branch}`;
@@ -146,7 +148,7 @@ async function unpack(
           if (entry.fileName.endsWith(".js")) {
             const encoder = new TextEncoder();
             const str =
-              `Using patched elm-janitor/${pkg} instead of elm/${pkg}@${version}`;
+              `Using elm-janitor/${pkg}@${hash} instead of elm/${pkg}@${version}`;
             const data = encoder.encode(`console.info('${str}');\n`);
             writer.writeSync(data);
           }
