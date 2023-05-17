@@ -39,17 +39,34 @@ export async function installPatch(
   const version = versions[versions.length - 1];
   console.log(`Trying to install elm-janitor/${pkg} v${version}`);
   const elmPkgDir = path.join(elmHomeDir, "0.19.1/packages/elm");
-  const versionDir = path.join(elmPkgDir, pkg, version);
-  await fs.emptyDir(versionDir);
-  if (verbose) console.log(`Created empty directory '${versionDir}'.`);
+  const dir = path.join(elmPkgDir, pkg, version);
+  await fs.emptyDir(dir);
+  if (verbose) console.log(`Created empty directory '${dir}'.`);
 
   const branch = `stack-${version}`;
+  await downloadPatch({ pkg, branch, dir, verbose, version });
+  console.log("Done.");
+}
+
+interface DownloadPatch {
+  pkg: string;
+  branch: string;
+  dir: string;
+  verbose: boolean;
+  version: string;
+}
+
+async function downloadPatch(
+  { pkg, branch, dir, verbose, version }: DownloadPatch,
+) {
   const url = `https://github.com/elm-janitor/${pkg}/archive/${branch}.tar.gz`;
   const res = await fetch(url);
   if (res.status !== 200) {
     throw `Got status ${res.status} when trying to download ${url}`;
   }
-  if (!res.body) throw `Empty body of ${url}`;
+  if (!res.body) {
+    throw `Empty body of ${url}`;
+  }
 
   // const dl = path.join(outDir, `${pkg.name}_${version}.tar.gz`);
   // const file = await Deno.open(dl, {create: true, write: true })
@@ -58,8 +75,7 @@ export async function installPatch(
   const streamed = res.body.pipeThrough(new DecompressionStream("gzip"))
     .getReader();
   const reader = readerFromStreamReader(streamed);
-  await unpack({ pkg, branch, dir: versionDir, reader, verbose, version });
-  console.log("Done.");
+  await unpack({ pkg, branch, dir: dir, reader, verbose, version });
 }
 
 interface Unpack {
