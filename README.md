@@ -100,5 +100,5 @@ CI to create huge release binaries.
 
 ## Notes
 
-To generate the docs.json file of an Elm package, run
-`elm make --docs docs.json`
+If you rely on local documentation, you can also generate the `docs.json` file
+of an Elm package by executing `elm make --docs docs.json`
