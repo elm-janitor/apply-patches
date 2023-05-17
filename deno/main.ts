@@ -58,14 +58,29 @@ export async function installPatch(
   const streamed = res.body.pipeThrough(new DecompressionStream("gzip"))
     .getReader();
   const reader = readerFromStreamReader(streamed);
+  await unpack({ pkg, branch, dir: versionDir, reader, verbose, version });
+  console.log("Done.");
+}
+
+interface Unpack {
+  pkg: string;
+  branch: string;
+  dir: string;
+  reader: Deno.Reader;
+  verbose: boolean;
+  version: string;
+}
+
+async function unpack(
+  { pkg, branch, dir, reader, verbose, version }: Unpack,
+) {
   // github creates a dir like `parser-stack-1.1.0`
   const drop = `${pkg}-${branch}`;
   const trimFileName = (fileName: string) =>
     fileName.substring(drop.length + 1);
   const outputFileName = (fileName: string) =>
-    path.join(versionDir, trimFileName(fileName));
+    path.join(dir, trimFileName(fileName));
 
-  const unpacked: string[] = [];
   const untar = new Untar(reader);
   for await (const entry of untar) {
     if (
@@ -74,7 +89,9 @@ export async function installPatch(
       entry.fileName === `${drop}/README.md` ||
       entry.fileName.startsWith(`${drop}/src`)
     ) {
-      if (verbose) console.log(`  Unpacking: ${entry.fileName}`);
+      if (verbose) {
+        console.log(`  Unpacking: ${entry.fileName}`);
+      }
       switch (entry.type) {
         case "directory": {
           await fs.ensureDir(outputFileName(entry.fileName));
@@ -95,15 +112,15 @@ export async function installPatch(
             writer.writeSync(data);
           }
           writer.close();
-          unpacked.push(out);
           break;
         }
       }
     } else {
-      if (verbose) console.log(`  Ignoring: ${entry.fileName}`);
+      if (verbose) {
+        console.log(`  Ignoring: ${entry.fileName}`);
+      }
     }
   }
-  console.log("Done.");
 }
 
 function findElmHome(): string {
