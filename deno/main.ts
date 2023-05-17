@@ -75,11 +75,12 @@ export async function patchCachedElmDependencies(elmHomeDir: string) {
                 write: true,
               });
               await copy(entry, writer);
-              if (entry.fileName.endsWith('.js')) {
+              if (entry.fileName.endsWith(".js")) {
                 const encoder = new TextEncoder();
-                const str = `Using patched elm-janitor/${pkg.name} instead of elm/${pkg.name}@${version}`
+                const str =
+                  `Using patched elm-janitor/${pkg.name} instead of elm/${pkg.name}@${version}`;
                 const data = encoder.encode(`console.warn('${str}');\n`);
-                writer.writeSync(data)
+                writer.writeSync(data);
               }
               patched.push(out);
               break;
