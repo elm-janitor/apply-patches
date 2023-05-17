@@ -1,6 +1,7 @@
 import * as fs from "https://deno.land/std@0.182.0/fs/mod.ts";
 import * as path from "https://deno.land/std@0.182.0/path/mod.ts";
 import { Untar } from "https://deno.land/std@0.182.0/archive/untar.ts";
+import { parse } from "https://deno.land/std@0.187.0/flags/mod.ts";
 import {
   copy,
   readerFromStreamReader,

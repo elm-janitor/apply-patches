@@ -132,6 +132,8 @@
     "https://deno.land/std@0.182.0/streams/writer_from_stream_writer.ts": "07c7ee025151a190f37fc42cbb01ff93afc949119ebddc6e0d0df14df1bf6950",
     "https://deno.land/std@0.182.0/streams/zip_readable_streams.ts": "a9d81aa451240f79230add674809dbee038d93aabe286e2d9671e66591fc86ca",
     "https://deno.land/std@0.182.0/types.d.ts": "dbaeb2c4d7c526db9828fc8df89d8aecf53b9ced72e0c4568f97ddd8cda616a4",
+    "https://deno.land/std@0.187.0/_util/asserts.ts": "178dfc49a464aee693a7e285567b3d0b555dc805ff490505a8aae34f9cfb1462",
+    "https://deno.land/std@0.187.0/flags/mod.ts": "d3b2fcf926e22661f35d72873a647785cc76f4a1a8aec8b335f35c959c504892",
     "https://deno.land/x/compress@v0.4.4/deps.ts": "096395daebc7ed8a18f0484e4ffcc3a7f70e50946735f7df9611a7fcfd8272cc",
     "https://deno.land/x/compress@v0.4.4/gzip/gzip_file.ts": "b044ec0df4266c084baa033a4ab5394882e44a86d09d5616636467dcb39c671d",
     "https://deno.land/x/compress@v0.4.4/interface.ts": "fc5f87bd208ab8a03a1f65972b11781967c3d21c3d756fe9ae99ca98e10e5780",
