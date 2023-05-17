@@ -21,6 +21,10 @@ If the package was already present in ELM_HOME, it is fully replaced.
 During the first compilation, the Elm compiler creates the `docs.json` and
 `artifacts.dat` files.
 
+Important: If you have an existing Elm project, it is best to remove the
+`elm-stuff` directory after applying the patches to ensure that the new sources
+are used and not old cached compiled files are used.
+
 ## Development
 
 I configured `$ELM_HOME` to the local dir
