@@ -1,16 +1,14 @@
 # Apply elm-janitor patches to Elm dependencies
 
-First draft at a script to apply the patches vetted by the
+The script can install patches from
 [elm-janitor](https://github.com/elm-janitor).
 
 ## Description
 
-The script can install patches from
-[elm-janitor](https://github.com/elm-janitor).
-
 Like the Elm compiler, it uses the environment variable `$ELM_HOME` to find the
-cache directory.  
-If it is not set, `$HOME/.elm`, `$USERPROFILE/.elm` or `%appdata%\elm` will be used instead.
+cache directory.\
+If it is not set, `$HOME/.elm`, `$USERPROFILE/.elm` or `%appdata%\elm` will be
+used instead.
 
 It downloads the release, and unpacks `README.md`, `elm.json`, `LICENSE` and the
 contents of the `src/` directory.\
@@ -18,6 +16,59 @@ If the package was already present in ELM_HOME, it is fully replaced.
 
 During the first compilation, the Elm compiler creates the `docs.json` and
 `artifacts.dat` files.
+
+## Usage
+
+### CLI params and flags
+
+```sh
+# Show the help text
+elm-janitor-apply-patches --help
+
+# Install all patches
+elm-janitor-apply-patches --all
+
+# Install only patch for elm/parser
+elm-janitor-apply-patches parser --verbose
+
+# Install a few patches
+elm-janitor-apply-patches parser json
+```
+
+### When deno is installed (3 options)
+
+1. Run the script
+
+```
+❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+```
+
+2. Install the script
+
+```
+❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+
+# And uninstall it again
+❯ deno uninstall elm-janitor-apply-patches
+```
+
+3. Compile a huge binary that contains the deno runtime
+
+```
+deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+```
+
+### When node is installed
+
+If there ever will be a stable version, use
+https://deno.land/manual@v1.32.4/advanced/publishing/dnt to generate a node
+module.
+
+### By downloading a binary
+
+If stable versions should ever be created,
+[deno compile](https://deno.land/manual@v1.32.4/tools/compiler) can be used on
+CI to create huge release binaries.
 
 ## Verifying the patch
 
@@ -73,60 +124,7 @@ cd ..
 Then re-run the tests or compile the example file to see the output of the new
 `deadEndsToString`.
 
-## Usage
-
-### When deno is installed (3 options)
-
-1. Run the script
-
-```
-❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
-```
-
-2. Install the script
-
-```
-❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
-
-# And uninstall it again
-❯ deno uninstall elm-janitor-apply-patches
-```
-
-3. Compile a huge binary that contains the deno runtime
-
-```
-deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
-```
-
-### When node is installed
-
-If there ever will be a stable version, use
-https://deno.land/manual@v1.32.4/advanced/publishing/dnt to generate a node
-module.
-
-### By downloading a binary
-
-If stable versions should ever be created,
-[deno compile](https://deno.land/manual@v1.32.4/tools/compiler) can be used on
-CI to create huge release binaries.
-
 ## Notes
 
 If you rely on local documentation, you can also generate the `docs.json` file
 of an Elm package by executing `elm make --docs docs.json`
-
-# CLI params and flags
-
-```sh
-# Show the help text
-elm-janitor-apply-patches --help
-
-# Install all patches
-elm-janitor-apply-patches --all
-
-# Install only patch for elm/parser
-elm-janitor-apply-patches parser --verbose
-
-# Install a few patches
-elm-janitor-apply-patches parser json
-```
