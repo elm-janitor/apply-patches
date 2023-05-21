@@ -19,6 +19,12 @@ During the first compilation, the Elm compiler creates the `docs.json` and
 
 ## Usage
 
+There are multiple ways to apply the patches using this script.\
+You can clone this repository and follow the
+[development instructions](#development), run the script with
+[deno](#with-the-deno-runtime), [node.js](#with-nodejs) or
+[download a huge binary](#by-downloading-a-binary).
+
 ### CLI params and flags
 
 ```sh
@@ -35,9 +41,11 @@ elm-janitor-apply-patches parser --verbose
 elm-janitor-apply-patches parser json
 ```
 
-### When deno is installed (3 options)
+### With the deno runtime
 
-1. Run the script
+There are three options when you have [deno](https://deno.land) installed.
+
+1. Run the script (recommended for one-time use)
 
 ```
 ❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
@@ -58,7 +66,7 @@ elm-janitor-apply-patches parser json
 deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 ```
 
-### When node is installed
+### With node.js
 
 If there ever will be a stable version, use
 https://deno.land/manual@v1.32.4/advanced/publishing/dnt to generate a node
