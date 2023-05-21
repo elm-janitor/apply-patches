@@ -188,6 +188,7 @@ function printHelp() {
   console.log("For example");
   console.log("❯ elm-janitor-apply-patches parser");
   console.log("");
+  console.log("You can pass `--verbose` to increase log output.");
 }
 
 if (import.meta.main) {
