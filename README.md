@@ -96,7 +96,8 @@ are used and not old cached compiled files are used.
 
 ## Development
 
-I configured `$ELM_HOME` to the local dir
+If you don't want to patch the dependencies used for every other Elm project,
+you can configure `$ELM_HOME` to another directory.
 
 ```sh
 # fish
@@ -129,8 +130,8 @@ deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home
 cd ..
 ```
 
-Then re-run the tests or compile the example file to see the output of the new
-`deadEndsToString`.
+Then re-run the tests or compile the example `src/Main.elm` file to see the
+output of the new `deadEndsToString`.
 
 ## Notes
 
