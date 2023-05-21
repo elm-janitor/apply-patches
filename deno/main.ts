@@ -19,7 +19,7 @@ const knownPatches: Record<string, string[]> = {
   "project-metadata-utils": ["1.0.2"],
   "random": ["1.0.0"],
   "time": ["1.0.0"],
-  "virtual-dom": [], // TODO
+  // "virtual-dom": [], // TODO
 };
 
 interface InstallPatch {
@@ -188,6 +188,9 @@ function printHelp() {
   console.log("For example");
   console.log("❯ elm-janitor-apply-patches parser");
   console.log("");
+  console.log("If you want to apply all patches, run");
+  console.log("❯ elm-janitor-apply-patches all");
+  console.log("");
   console.log("You can pass `--verbose` to increase log output.");
 }
 
@@ -196,11 +199,16 @@ if (import.meta.main) {
   console.log(`Working with ELM_HOME '${elmHomeDir}'.`);
 
   const flags = parse(Deno.args, {
-    boolean: ["help", "verbose"],
+    boolean: ["all", "help", "verbose"],
   });
 
   if (flags.help) {
     printHelp();
+  } else if (flags.all) {
+    for (const pkg of Object.keys(knownPatches)) {
+      console.log("");
+      await installPatch({ elmHomeDir, pkg, verbose: flags.verbose });
+    }
   } else if (Array.isArray(flags._) && flags._.length > 0) {
     flags._.forEach((pkg: string | number) => {
       if (typeof pkg !== "string" || !knownPatches[pkg]) {

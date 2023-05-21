@@ -114,3 +114,19 @@ CI to create huge release binaries.
 
 If you rely on local documentation, you can also generate the `docs.json` file
 of an Elm package by executing `elm make --docs docs.json`
+
+# CLI params and flags
+
+```sh
+# Show the help text
+elm-janitor-apply-patches --help
+
+# Install all patches
+elm-janitor-apply-patches --all
+
+# Install only patch for elm/parser
+elm-janitor-apply-patches parser --verbose
+
+# Install a few patches
+elm-janitor-apply-patches parser json
+```
