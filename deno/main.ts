@@ -6,6 +6,7 @@ import {
   copy,
   readerFromStreamReader,
 } from "https://deno.land/std@0.182.0/streams/mod.ts";
+import { isWindows } from "https://deno.land/std@0.182.0/_util/os.ts";
 
 const knownPatches: Record<string, string[]> = {
   "bytes": ["1.0.8"],
@@ -165,9 +166,19 @@ async function unpack(
 }
 
 function findElmHome(): string {
-  // TODO find out if Windows uses `%appdata%/elm` or `%localappdata%/elm`
-  const elmHome = Deno.env.get("ELM_HOME") || "~/.elm";
-  return elmHome;
+  const elmHome = Deno.env.get("ELM_HOME");
+  if (elmHome) return elmHome;
+
+  const home = Deno.env.get("HOME") ?? Deno.env.get("USERPROFILE");
+  if (!home) {
+    throw new Error("Could not find the user's home directory");
+  }
+  if (isWindows) {
+    // Deno cannot resolve `%appdata%\elm`
+    return path.join(home, "AppData/Roaming/elm");
+  } else {
+    return path.join(home, ".elm");
+  }
 }
 
 function printHelp() {

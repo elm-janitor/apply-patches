@@ -9,10 +9,8 @@ The script can install patches from
 [elm-janitor](https://github.com/elm-janitor).
 
 Like the Elm compiler, it uses the environment variable `$ELM_HOME` to find the
-cache directory, or defaults to `~/.elm`.
-
-Note: I guess for Windows, another fallback is needed. I think the default
-location is `%appdata%/elm` (local/roaming), but have not tested it.
+cache directory.  
+If it is not set, `$HOME/.elm`, `$USERPROFILE/.elm` or `%appdata%\elm` will be used instead.
 
 It downloads the release, and unpacks `README.md`, `elm.json`, `LICENSE` and the
 contents of the `src/` directory.\
@@ -46,6 +44,8 @@ I configured `$ELM_HOME` to the local dir
 set ELM_HOME (pwd)/elm-home
 # sh
 ELM_HOME=`pwd`/elm-home
+# Windows CMD.exe
+set ELM_HOME=%cd%\elm-home
 ```
 
 And then let the Elm compiler download the dependencies by starting compilation.
@@ -80,13 +80,13 @@ Then re-run the tests or compile the example file to see the output of the new
 1. Run the script
 
 ```
-❯ deno run --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 ```
 
 2. Install the script
 
 ```
-❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 
 # And uninstall it again
 ❯ deno uninstall elm-janitor-apply-patches
@@ -95,7 +95,7 @@ Then re-run the tests or compile the example file to see the output of the new
 3. Compile a huge binary that contains the deno runtime
 
 ```
-deno compile --allow-env=ELM_HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
 ```
 
 ### When node is installed
