@@ -3,7 +3,7 @@
 Script to apply patches from [elm-janitor](https://github.com/elm-janitor) by
 replacing the official `elm/<package>` packages in the local Elm package cache.
 
-## [Unreleased](https://github.com/elm-janitor/apply-patches/compare/v0.1.0...main)
+## [Unreleased](https://github.com/elm-janitor/apply-patches/compare/v0.1.1...main)
 
 -
 
