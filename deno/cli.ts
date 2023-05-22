@@ -40,10 +40,7 @@ async function printStatus(elmHomeDir: string, verbose: boolean) {
 }
 
 async function installAllPatches(elmHomeDir: string, verbose: boolean) {
-  for (const pkg of Object.keys(knownPatches)) {
-    console.log("");
-    await installPatch({ elmHomeDir, pkg, verbose });
-  }
+  await installPatches(elmHomeDir, Object.keys(knownPatches), verbose);
 }
 
 async function installPatches(
