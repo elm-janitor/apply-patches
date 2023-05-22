@@ -1,5 +1,5 @@
 import { Flags } from "./deps.ts";
-import { findElmHome, installPatch, knownPatches } from "./main.ts";
+import { findElmHome, installPatch, knownPatches } from "./mod.ts";
 
 function printHelp() {
   console.log("To install one or more of the patched Elm packages from");
