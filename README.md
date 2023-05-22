@@ -41,6 +41,9 @@ elm-janitor-apply-patches parser --verbose
 elm-janitor-apply-patches parser json
 ```
 
+The flag `--verbose` can be added to most other commands to print more
+information.
+
 ### With the deno runtime
 
 There are three options when you have [deno](https://deno.land) installed.
