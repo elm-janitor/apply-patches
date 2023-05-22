@@ -1,12 +1,4 @@
-import * as fs from "https://deno.land/std@0.182.0/fs/mod.ts";
-import * as path from "https://deno.land/std@0.182.0/path/mod.ts";
-import { Untar } from "https://deno.land/std@0.182.0/archive/untar.ts";
-import { parse } from "https://deno.land/std@0.187.0/flags/mod.ts";
-import {
-  copy,
-  readerFromStreamReader,
-} from "https://deno.land/std@0.182.0/streams/mod.ts";
-import { isWindows } from "https://deno.land/std@0.182.0/_util/os.ts";
+import { fs, isWindows, parse, path, streams, Untar } from "./deps.ts";
 
 const knownPatches: Record<string, string[]> = {
   "bytes": ["1.0.8"],
@@ -99,7 +91,7 @@ async function downloadPatch(
 
   const streamed = res.body.pipeThrough(new DecompressionStream("gzip"))
     .getReader();
-  const reader = readerFromStreamReader(streamed);
+  const reader = streams.readerFromStreamReader(streamed);
   await unpack({ pkg, branch, dir, hash, reader, verbose, version });
 }
 
@@ -145,7 +137,7 @@ async function unpack(
             create: true,
             write: true,
           });
-          await copy(entry, writer);
+          await streams.copy(entry, writer);
           if (entry.fileName.endsWith(".js")) {
             const encoder = new TextEncoder();
             const str =
