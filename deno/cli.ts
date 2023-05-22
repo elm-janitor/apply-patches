@@ -48,11 +48,11 @@ async function installAllPatches(elmHomeDir: string, verbose: boolean) {
 
 async function installPatches(
   elmHomeDir: string,
-  pkgs: Array<string | number>,
+  pkgs: Array<string>,
   verbose: boolean,
 ) {
-  pkgs.forEach((pkg: string | number) => {
-    if (typeof pkg !== "string" || !knownPatches[pkg]) {
+  pkgs.forEach((pkg: string) => {
+    if (!knownPatches[pkg]) {
       console.error(`I don't know how to patch package 'elm/${pkg}'.`);
       console.error("Will quit now.");
       Deno.exit(1);
@@ -61,11 +61,7 @@ async function installPatches(
 
   for (const pkg of pkgs) {
     console.log("");
-    await installPatch({
-      elmHomeDir,
-      pkg: pkg as string,
-      verbose,
-    });
+    await installPatch({ elmHomeDir, pkg, verbose });
   }
 }
 
@@ -83,7 +79,10 @@ if (flags.help) {
 } else if (flags.all) {
   await installAllPatches(elmHomeDir, flags.verbose);
 } else if (Array.isArray(flags._) && flags._.length > 0) {
-  await installPatches(elmHomeDir, flags._, flags.verbose);
+  const pkgs = flags._.filter((f: string | number) =>
+    typeof f === "string"
+  ) as string[];
+  await installPatches(elmHomeDir, pkgs, flags.verbose);
 } else {
   printHelp();
 }
