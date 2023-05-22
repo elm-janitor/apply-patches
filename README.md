@@ -1,20 +1,36 @@
 # Apply elm-janitor patches to Elm dependencies
 
-The script can install patches from
-[elm-janitor](https://github.com/elm-janitor).
+This script can install maintenance patches from
+[elm-janitor](https://github.com/elm-janitor/manifesto#elm-core-library-maintenance).
+
+This script is intended to be used until we have a nice way to apply patches
+integrated into
+[elm-tooling-compiler (elmx)](https://github.com/supermario/elm-tooling-compiler)
+or maybe an
+[alternate Elm package server](https://github.com/eco-pro/eco-server) can be
+used.
+
+If you don't want to use this script, you can also adapt one of these solutions:
+[pdamoc/elm-pkg-patch](https://github.com/pdamoc/elm-pkg-patch),
+[robx/shelm](https://github.com/robx/shelm) or
+[robinheghan/elm-git-install](https://github.com/robinheghan/elm-git-install)
 
 ## Description
 
-Like the Elm compiler, it uses the environment variable `$ELM_HOME` to find the
-cache directory.\
+Like the Elm compiler, this script uses the environment variable `$ELM_HOME` to
+find the cache directory.\
 If it is not set, `$HOME/.elm`, `$USERPROFILE/.elm` or `%appdata%\elm` will be
 used instead.
 
-It downloads the release, and unpacks `README.md`, `elm.json`, `LICENSE` and the
-contents of the `src/` directory.\
+It downloads the
+[release archive](https://github.com/elm-janitor/parser/tree/stack-1.1.0), and
+then unpacks the files `README.md`, `elm.json`, `LICENSE` and the content of the
+`src/` directory.\
+It also creates a file `elm-janitor-commit.json` with information about the
+specific downloaded commit.\
 If the package was already present in ELM_HOME, it is fully replaced.
 
-During the first compilation, the Elm compiler creates the `docs.json` and
+During the first compilation, the Elm compiler will create the `docs.json` and
 `artifacts.dat` files.
 
 ## Usage
