@@ -3,6 +3,9 @@
 This script can install maintenance patches from
 [elm-janitor](https://github.com/elm-janitor/manifesto#elm-core-library-maintenance).
 
+If you have questions, suggestions or problems, join the
+[🧹 elm-janitor channel on "Incremental Elm" discord](https://discord.com/channels/534524278847045633/933054571981471755).
+
 This script is intended to be used until we have a nice way to apply patches
 integrated into
 [elm-tooling-compiler (elmx)](https://github.com/supermario/elm-tooling-compiler)
