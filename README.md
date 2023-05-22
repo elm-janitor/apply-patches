@@ -51,13 +51,13 @@ There are three options when you have [deno](https://deno.land) installed.
 1. Run the script (recommended for one-time use)
 
 ```
-❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+❯ deno run --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com  https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/cli.ts
 ```
 
 2. Install the script
 
 ```
-❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+❯ deno install --name elm-janitor-apply-patches --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/cli.ts
 
 # And uninstall it again
 ❯ deno uninstall elm-janitor-apply-patches
@@ -66,7 +66,7 @@ There are three options when you have [deno](https://deno.land) installed.
 3. Compile a huge binary that contains the deno runtime
 
 ```
-deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/main.ts
+deno compile --allow-env=ELM_HOME,HOME --allow-read --allow-write --allow-net=github.com,codeload.github.com,api.github.com --output elm-janitor-apply-patches https://raw.githubusercontent.com/elm-janitor/apply-patches/main/deno/cli.ts
 ```
 
 ### With node.js
@@ -129,7 +129,7 @@ After that, run the script to apply the patches for `elm/parser` like this:
 
 ```sh
 cd deno
-deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com,api.github.com main.ts --verbose parser
+deno run --allow-env=ELM_HOME --allow-read=../elm-home --allow-write=../elm-home --allow-net=github.com,codeload.github.com,api.github.com cli.ts --verbose parser
 cd ..
 ```
 
