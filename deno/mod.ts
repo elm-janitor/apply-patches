@@ -14,6 +14,12 @@ export const knownPatches: Readonly<Record<string, string[]>> = {
   // "virtual-dom": [], // TODO
 };
 
+const ELM_JANITOR_COMMIT_FILE = "elm-janitor-commit.json";
+
+function baseElmPackagesDir(elmHomeDir: string) {
+  return path.join(elmHomeDir, "0.19.1/packages/elm");
+}
+
 export interface InstallPatch {
   elmHomeDir: string;
   pkg: string;
@@ -31,7 +37,7 @@ export async function installPatch(
   }
   const version = versions[versions.length - 1];
   console.log(`Trying to install elm-janitor/${pkg} v${version}`);
-  const elmPkgDir = path.join(elmHomeDir, "0.19.1/packages/elm");
+  const elmPkgDir = baseElmPackagesDir(elmHomeDir);
   const dir = path.join(elmPkgDir, pkg, version);
   await fs.emptyDir(dir);
   if (verbose) console.log(`Created empty directory '${dir}'.`);
@@ -57,7 +63,7 @@ async function saveCommitHash({ pkg, branch, dir }: SaveCommitHash) {
   if (hash) console.log(`Commit ${hash}`);
 
   await Deno.writeTextFile(
-    path.join(dir, "elm-janitor-commit.json"),
+    path.join(dir, ELM_JANITOR_COMMIT_FILE),
     JSON.stringify(json),
   );
   return hash.substring(0, 7);
@@ -171,4 +177,36 @@ export function findElmHome(): string {
   } else {
     return path.join(home, ".elm");
   }
+}
+
+export type Status = Array<[string, string | undefined]>;
+
+export async function getStatus(
+  elmHomeDir: string,
+): Promise<Status> {
+  const result: Status = [];
+  const baseDir = baseElmPackagesDir(elmHomeDir);
+  for (const [pkgName, versions] of Object.entries(knownPatches)) {
+    for (const version of versions) {
+      const file = path.join(
+        baseDir,
+        pkgName,
+        version,
+        ELM_JANITOR_COMMIT_FILE,
+      );
+      const json: Record<string, unknown> | undefined = await Deno.readTextFile(
+        file,
+      )
+        .then((raw) => JSON.parse(raw) as Record<string, unknown>)
+        .catch(() => undefined);
+
+      const key = `${pkgName}@${version}`;
+      if (json && json.sha && typeof json.sha === "string") {
+        result.push([key, json.sha]);
+      } else {
+        result.push([key, undefined]);
+      }
+    }
+  }
+  return result;
 }

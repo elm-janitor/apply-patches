@@ -1,5 +1,5 @@
 import { Flags } from "./deps.ts";
-import { findElmHome, installPatch, knownPatches } from "./mod.ts";
+import { findElmHome, getStatus, installPatch, knownPatches } from "./mod.ts";
 
 function printHelp() {
   console.log("To install one or more of the patched Elm packages from");
@@ -11,18 +11,45 @@ function printHelp() {
   console.log("If you want to apply all patches, run");
   console.log("❯ elm-janitor-apply-patches --all");
   console.log("");
+  console.log("To check if (and which) patches were applied, run");
+  console.log("❯ elm-janitor-apply-patches --status");
+  console.log("");
   console.log("You can pass `--verbose` to increase log output.");
+}
+
+async function printStatus(elmHomeDir: string, verbose: boolean) {
+  const allPackages = await getStatus(elmHomeDir);
+  const filteredPackages = allPackages.filter(([_key, value]) => !!value);
+  const count = filteredPackages.length;
+  let msg = "";
+  switch (count) {
+    case 0:
+      msg = "No Elm package was patched";
+      break;
+    case 1:
+      msg = "One Elm package is patched";
+      break;
+    default:
+      msg = `${count} Elm packages are patched`;
+  }
+  console.log(`${msg} with \`elm-janitor-apply-patches\`.`);
+  const list = verbose ? allPackages : filteredPackages;
+  for (const [pkg, commit] of list) {
+    console.log(`  ${pkg}: ${commit ?? "not patched"}`);
+  }
 }
 
 const elmHomeDir = findElmHome();
 console.log(`Working with ELM_HOME '${elmHomeDir}'.`);
 
 const flags = Flags(Deno.args, {
-  boolean: ["all", "help", "verbose"],
+  boolean: ["all", "help", "status", "verbose"],
 });
 
 if (flags.help) {
   printHelp();
+} else if (flags.status) {
+  await printStatus(elmHomeDir, flags.verbose);
 } else if (flags.all) {
   for (const pkg of Object.keys(knownPatches)) {
     console.log("");

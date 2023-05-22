@@ -31,6 +31,9 @@ You can clone this repository and follow the
 # Show the help text
 elm-janitor-apply-patches --help
 
+# Print the status which packages were patched (and with what version)
+elm-janitor-apply-patches --status
+
 # Install all patches
 elm-janitor-apply-patches --all
 
@@ -92,6 +95,9 @@ example:
 ```
 console.info('Using elm-janitor/parser@a61f4ae instead of elm/parser@1.1.0');
 ```
+
+You can also execute `elm-janitor-apply-patches --status` to receive a list of
+the patched packages.
 
 **Important**: If you have an existing Elm project, it is best to remove the
 `elm-stuff` directory after applying the patches to ensure that the new sources
