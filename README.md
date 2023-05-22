@@ -143,7 +143,7 @@ And then let the Elm compiler download the dependencies by starting compilation.
 ```sh
 cd example
 # And run the test
-elm-test
+elm-test-rs
 # OR
 elm make src/Main.elm
 # and then open the generated `index.html` file
