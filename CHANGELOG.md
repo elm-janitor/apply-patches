@@ -23,6 +23,6 @@ replacing the official `elm/<package>` packages in the local Elm package cache.
   `❯ elm-janitor-apply-patches parser json`
 - Apply all known patches `❯ elm-janitor-apply-patches --all`
 - Print used commit hash of all applied patches
-  `❯ elm-janitor-apply-patches --status --verbose`
+  `❯ elm-janitor-apply-patches --status`
 - Print status of all known patches
   `❯ elm-janitor-apply-patches --status --verbose`
