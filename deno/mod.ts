@@ -3,7 +3,7 @@ import { fs, isWindows, path, streams, Untar } from "./deps.ts";
 export const knownPatches: Readonly<Record<string, string[]>> = {
   "bytes": ["1.0.8"],
   "browser": ["1.0.2"],
-  // "core": ["1.0.5"], // TODO https://github.com/elm-janitor/apply-patches/issues/1
+  "core": ["1.0.5"],
   "file": ["1.0.5"],
   "http": ["2.0.0"],
   "json": ["1.1.3"],
