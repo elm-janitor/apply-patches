@@ -15,6 +15,8 @@ function printHelp() {
   console.log("❯ elm-janitor-apply-patches --status");
   console.log("");
   console.log("You can pass `--verbose` to increase log output.");
+  console.log("");
+  console.log("You can suppress writing console messages with `--noconsole`.");
 }
 
 async function printStatus(elmHomeDir: string, verbose: boolean) {
@@ -39,14 +41,24 @@ async function printStatus(elmHomeDir: string, verbose: boolean) {
   }
 }
 
-async function installAllPatches(elmHomeDir: string, verbose: boolean) {
-  await installPatches(elmHomeDir, Object.keys(knownPatches), verbose);
+async function installAllPatches(
+  elmHomeDir: string,
+  verbose: boolean,
+  noconsole: boolean,
+) {
+  await installPatches(
+    elmHomeDir,
+    Object.keys(knownPatches),
+    verbose,
+    noconsole,
+  );
 }
 
 async function installPatches(
   elmHomeDir: string,
   pkgs: Array<string>,
   verbose: boolean,
+  noconsole: boolean,
 ) {
   pkgs.forEach((pkg: string) => {
     if (!knownPatches[pkg]) {
@@ -58,7 +70,7 @@ async function installPatches(
 
   for (const pkg of pkgs) {
     console.log("");
-    await installPatch({ elmHomeDir, pkg, verbose });
+    await installPatch({ elmHomeDir, pkg, verbose, noconsole });
   }
 }
 
@@ -66,7 +78,7 @@ const elmHomeDir = findElmHome();
 console.log(`Working with ELM_HOME '${elmHomeDir}'.`);
 
 const flags = Flags(Deno.args, {
-  boolean: ["all", "help", "status", "verbose"],
+  boolean: ["all", "help", "status", "verbose", "noconsole"],
 });
 
 if (flags.help) {
@@ -74,12 +86,14 @@ if (flags.help) {
 } else if (flags.status) {
   await printStatus(elmHomeDir, flags.verbose);
 } else if (flags.all) {
-  await installAllPatches(elmHomeDir, flags.verbose);
+  console.log("No console", flags.noconsole);
+  await installAllPatches(elmHomeDir, flags.verbose, flags.noconsole);
 } else if (Array.isArray(flags._) && flags._.length > 0) {
-  const pkgs = flags._.filter((f: string | number) =>
-    typeof f === "string"
+  const pkgs = flags._.filter(
+    (f: string | number) => typeof f === "string",
   ) as string[];
-  await installPatches(elmHomeDir, pkgs, flags.verbose);
+  console.log("No console", flags.noconsole);
+  await installPatches(elmHomeDir, pkgs, flags.verbose, flags.noconsole);
 } else {
   printHelp();
 }

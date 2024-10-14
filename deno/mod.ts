@@ -24,11 +24,15 @@ export interface InstallPatch {
   elmHomeDir: string;
   pkg: string;
   verbose: boolean;
+  noconsole: boolean;
 }
 
-export async function installPatch(
-  { elmHomeDir, pkg, verbose }: InstallPatch,
-): Promise<void> {
+export async function installPatch({
+  elmHomeDir,
+  pkg,
+  verbose,
+  noconsole,
+}: InstallPatch): Promise<void> {
   const versions = knownPatches[pkg];
   if (!versions || versions.length === 0) {
     const err = `I don't know how to patch elm/${pkg}.`;
@@ -44,8 +48,13 @@ export async function installPatch(
 
   const branch = `stack-${version}`;
   const hash = await saveCommitHash({ pkg, branch, dir });
-  await downloadPatch({ pkg, branch, dir, hash, verbose, version });
-  console.log("Done.");
+  if (!hash) {
+    const err = `An error occurred fetching the commit hash for ${pkg}.`;
+    console.error(err);
+    throw new Error(err);
+  }
+  await downloadPatch({ pkg, branch, dir, hash, verbose, version, noconsole });
+  console.log(`Successfully patched ${pkg}.`);
 }
 
 interface SaveCommitHash {
@@ -55,9 +64,13 @@ interface SaveCommitHash {
 }
 
 async function saveCommitHash({ pkg, branch, dir }: SaveCommitHash) {
-  const url =
-    `https://api.github.com/repos/elm-janitor/${pkg}/commits/${branch}`;
-  const json = await (await fetch(url)).json();
+  const url = `https://api.github.com/repos/elm-janitor/${pkg}/commits/${branch}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    console.error(`Error fetching patch for ${pkg}: ${response.status}`);
+    return null;
+  }
+  const json = await response.json();
   const hash: string = json.sha;
 
   if (hash) console.log(`Commit ${hash}`);
@@ -76,11 +89,18 @@ interface DownloadPatch {
   hash: string;
   verbose: boolean;
   version: string;
+  noconsole: boolean;
 }
 
-async function downloadPatch(
-  { pkg, branch, dir, hash, verbose, version }: DownloadPatch,
-) {
+async function downloadPatch({
+  pkg,
+  branch,
+  dir,
+  hash,
+  verbose,
+  version,
+  noconsole,
+}: DownloadPatch) {
   console.log("Downloading");
   const url = `https://github.com/elm-janitor/${pkg}/archive/${branch}.tar.gz`;
   const res = await fetch(url);
@@ -95,10 +115,11 @@ async function downloadPatch(
   // const file = await Deno.open(dl, {create: true, write: true })
   // res.body.pipeTo(file.writable)
 
-  const streamed = res.body.pipeThrough(new DecompressionStream("gzip"))
+  const streamed = res.body
+    .pipeThrough(new DecompressionStream("gzip"))
     .getReader();
   const reader = streams.readerFromStreamReader(streamed);
-  await unpack({ pkg, branch, dir, hash, reader, verbose, version });
+  await unpack({ pkg, branch, dir, hash, reader, verbose, version, noconsole });
 }
 
 interface Unpack {
@@ -109,11 +130,19 @@ interface Unpack {
   reader: Deno.Reader;
   verbose: boolean;
   version: string;
+  noconsole: boolean;
 }
 
-async function unpack(
-  { pkg, branch, dir, hash, reader, verbose, version }: Unpack,
-) {
+async function unpack({
+  pkg,
+  branch,
+  dir,
+  hash,
+  reader,
+  verbose,
+  version,
+  noconsole,
+}: Unpack) {
   // github creates a dir like `parser-stack-1.1.0`
   const drop = `${pkg}-${branch}`;
   const trimFileName = (fileName: string) =>
@@ -144,10 +173,10 @@ async function unpack(
             write: true,
           });
           await streams.copy(entry, writer);
-          if (entry.fileName.endsWith(".js")) {
+          if (entry.fileName.endsWith(".js") && !noconsole) {
+            console.log("Writing console.log messages to output.");
             const encoder = new TextEncoder();
-            const str =
-              `Using elm-janitor/${pkg}@${hash} instead of elm/${pkg}@${version}`;
+            const str = `Using elm-janitor/${pkg}@${hash} instead of elm/${pkg}@${version}`;
             const data = encoder.encode(`console.info('${str}');\n`);
             writer.writeSync(data);
           }
@@ -181,9 +210,7 @@ export function findElmHome(): string {
 
 export type Status = Array<[string, string | undefined]>;
 
-export async function getStatus(
-  elmHomeDir: string,
-): Promise<Status> {
+export async function getStatus(elmHomeDir: string): Promise<Status> {
   const result: Status = [];
   const baseDir = baseElmPackagesDir(elmHomeDir);
   for (const [pkgName, versions] of Object.entries(knownPatches)) {
