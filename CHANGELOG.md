@@ -5,7 +5,8 @@ replacing the official `elm/<package>` packages in the local Elm package cache.
 
 ## [Unreleased](https://github.com/elm-janitor/apply-patches/compare/v0.1.2...main)
 
--
+- Suppress writing console messages about the replaced packages, e.g.
+  `❯ elm-janitor-apply-patches --noconsole parser`
 
 ## [0.1.2](https://github.com/elm-janitor/apply-patches/compare/v0.1.1...v0.1.2)
 
