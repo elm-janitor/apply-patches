@@ -1,6 +1,6 @@
 # Development
 
-Look into `./deno.json` for the available shortcuts.
+Look into `./deno.jsonc` for the available shortcuts or run `deno task`.
 
 Run `deno task update-deps` to refresh the dependency lock file
 

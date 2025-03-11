@@ -1,5 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "build-npm-package": "deno run --allow-env --allow-net=deno.land --allow-write=../npm --allow-read --allow-run=npm scripts/build_npm.ts",
+    "update-deps": "deno cache --reload --lock=deno.lock deps.ts"
   }
 }
