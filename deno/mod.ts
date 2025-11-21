@@ -11,7 +11,7 @@ export const knownPatches: Readonly<Record<string, string[]>> = {
   "project-metadata-utils": ["1.0.2"],
   "random": ["1.0.0"],
   "time": ["1.0.0"],
-  // "virtual-dom": [], // TODO
+  "virtual-dom": ["1.0.5"],
 };
 
 const ELM_JANITOR_COMMIT_FILE = "elm-janitor-commit.json";
@@ -122,12 +122,16 @@ async function downloadPatch({
   await unpack({ pkg, branch, dir, hash, reader, verbose, version, noconsole });
 }
 
+interface Reader {
+  read(p: Uint8Array): Promise<number | null>;
+}
+
 interface Unpack {
   pkg: string;
   branch: string;
   dir: string;
   hash: string;
-  reader: Deno.Reader;
+  reader: Reader;
   verbose: boolean;
   version: string;
   noconsole: boolean;
