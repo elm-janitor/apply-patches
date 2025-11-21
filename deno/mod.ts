@@ -122,12 +122,16 @@ async function downloadPatch({
   await unpack({ pkg, branch, dir, hash, reader, verbose, version, noconsole });
 }
 
+interface Reader {
+  read(p: Uint8Array): Promise<number | null>;
+}
+
 interface Unpack {
   pkg: string;
   branch: string;
   dir: string;
   hash: string;
-  reader: Deno.Reader;
+  reader: Reader;
   verbose: boolean;
   version: string;
   noconsole: boolean;
