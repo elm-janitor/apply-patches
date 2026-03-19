@@ -22,7 +22,7 @@ await build({
   package: {
     // package.json properties
     name: "elm-janitor-apply-patches",
-    version: "1.0.0",
+    version: "1.1.0",
     description: "Script to apply the elm-janitor patches to ELM_HOME.",
     license: "UNLICENSE",
     repository: {
