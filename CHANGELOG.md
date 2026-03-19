@@ -7,12 +7,16 @@ replacing the official `elm/<package>` packages in the local Elm package cache.
 
 -
 
-## [1.0.0](https://github.com/elm-janitor/apply-patches/compare/v0.1.2...v1.0.0)
+## [1.1.0](https://github.com/elm-janitor/apply-patches/compare/v1.0.0...v1.1.0) 2026-03-19
+
+- Add virtual-dom 1.0.5 patches, see #5
+
+## [1.0.0](https://github.com/elm-janitor/apply-patches/compare/v0.1.2...v1.0.0) 2025-03-11
 
 - Suppress messages in browser console about the replaced packages, e.g.
   `❯ elm-janitor-apply-patches --noconsole parser`
 
-## [0.1.2](https://github.com/elm-janitor/apply-patches/compare/v0.1.1...v0.1.2)
+## [0.1.2](https://github.com/elm-janitor/apply-patches/compare/v0.1.1...v0.1.2) 2023-12-23
 
 - Allow `❯ elm-janitor-apply-patches core` after #1 was fixed.
 
